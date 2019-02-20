@@ -22,13 +22,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 #SECRET_KEY = '#iti31gp-yxx*^$o0l-86b7r0q5lmit$eryf+59o8qt83%om#*'
+local = os.environ.get('LOCAL_MACHINE') == "True"
 SECRET_KEY = os.environ.get('EVENTS_APP_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG_VAL') == 'True'
 
 ALLOWED_HOSTS = ['events-app-djang.herokuapp.com']
-if DEBUG:
+if local:
     ALLOWED_HOSTS.append('localhost')
 
 # Application definition
@@ -80,13 +81,15 @@ WSGI_APPLICATION = 'django_proj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-if DEBUG:
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+if local:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -162,5 +165,5 @@ AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-if not DEBUG:
+if not local:
     django_heroku.settings(locals())
