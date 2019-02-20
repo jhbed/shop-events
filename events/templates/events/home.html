@@ -5,7 +5,7 @@
           <h2>Upcoming Events</h2>
       </div>    
     {% for event in events %}
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
             <article class="media content-section">
               <img src="{{ event.author.profile.image.url }}" 
                    class="rounded-circle article-img" 
@@ -20,6 +20,26 @@
                   <p class="article-content">{{ event.content|truncatewords:30 }}</p>
                 </div>
             </article>
+        </div> -->
+        <div class="col-md-12">
+            <div class="card flex-md-row mb-4 box-shadow h-md-250">
+              <div class="card-body d-flex flex-column align-items-start">
+                <div>
+                  <img src="{{ event.author.profile.image.url }}" 
+                    class="rounded-circle article-img" 
+                    alt="{{event.author.username}}-img"
+                  >
+                  <strong class="mb-2 text-primary">{{ event.author.username }}</strong>
+                </div>
+                <h3 class="mb-0">
+                  <a class="text-dark" href="{% url 'event-detail' event.pk %}">{{ event.title }}</a>
+                </h3>
+                <div class="mb-1 text-muted">{{ event.date_posted|date:"F d, Y" }}</div>
+                <p class="card-text mb-auto">{{ event.content|truncatewords:30 }}</p>
+                <a href="{% url 'event-detail' event.pk %}">Go to Event</a>
+              </div>
+              <img class="card-img-right flex-auto d-none d-md-block article-side-img" src="{{ event.image.url }}" alt="Card image cap">
+            </div>
         </div>
     {%endfor%}
     {% if is_paginated %}

@@ -50,9 +50,22 @@ body {
   }
   
   .article-img {
-    height: 65px;
-    width: 65px;
-    margin-right: 16px;
+    height: 40px;
+    width: 40px;
+    margin-right: 2px;
+    margin-bottom: 10px;
+    vertical-align: middle;
+  }
+
+  .article-side-img {
+    width: 300px;
+     height: 200px;
+     object-fit: cover;
+  }
+
+  .article-main-img {
+    width: 100%;
+
   }
   
   .article-metadata {

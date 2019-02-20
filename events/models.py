@@ -11,6 +11,9 @@ class Event(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    attendees = models.ManyToManyField(User, related_name='events')
+    rsvp_goal = models.IntegerField()
+    image = models.ImageField(default='default_event_img.jpg', upload_to='event_pics')
 
     def __str__(self):
         return self.title

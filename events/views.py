@@ -1,13 +1,15 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import Event
 from django.contrib.auth.models import User
+from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (ListView, 
                                   DetailView, 
                                   CreateView,
                                   UpdateView,
-                                  DeleteView)
+                                  DeleteView, 
+                                  View)
 # Create your views here.
 
 def home(request):
@@ -38,8 +40,31 @@ class UserEventListView(ListView):
         
 
 
-class EventDetailView(DetailView):
+class EventDetailView(SingleObjectMixin, LoginRequiredMixin, View):
     model = Event
+    #template_name_suffix = '_attend_form'
+    #fields = ['attendees']
+    http_method_names = ['post', 'get']
+
+    def get(self, request, *args, **kwargs):
+
+        event = self.get_object()
+        goal = event.rsvp_goal
+        width_ratio = (event.attendees.count() / goal) * 100
+        width_ratio = str(width_ratio) + '%'
+        context = {
+            'object' : event,
+            'attendees_count' : event.attendees.count(),
+            'width_ratio' : width_ratio
+        }
+
+        return render(request, 'events/event_detail.html', context)
+
+    def post(self, request, *args, **kwargs):
+        event = self.get_object()
+        event.attendees.add(self.request.user)
+        return redirect('event-detail', event.pk)
+
 
 class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Event
@@ -54,7 +79,7 @@ class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
-    fields = ['title', 'content']
+    fields = ['title', 'rsvp_goal', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -63,7 +88,7 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
-    fields = ['title', 'content']
+    fields = ['title', 'content', 'image']
 
     def form_valid(self, form):
         form.instance.author = self.request.user
