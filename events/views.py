@@ -40,7 +40,7 @@ class UserEventListView(ListView):
         
 
 
-class EventDetailView(SingleObjectMixin, LoginRequiredMixin, View):
+class EventDetailView(SingleObjectMixin, View):
     model = Event
     #template_name_suffix = '_attend_form'
     #fields = ['attendees']
@@ -62,8 +62,14 @@ class EventDetailView(SingleObjectMixin, LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         event = self.get_object()
-        event.attendees.add(self.request.user)
-        return redirect('event-detail', event.pk)
+        if self.request.user.is_authenticated:
+            event.attendees.add(self.request.user)
+            return redirect('event-detail', event.pk)
+        else:
+            #return the same page with modal trggered and error msg
+            #below is not sufficient
+            return redirect('login')
+            
 
 
 class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
