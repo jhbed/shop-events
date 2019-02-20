@@ -121,6 +121,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #BASE_DIR is projects base directory
 STATIC_URL = '/static/'
 
 #no matter what OS we're on, this should work since we're using os module
