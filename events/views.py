@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .models import Event
+from django import forms
+from django.db.models import Count
 from django.contrib.auth.models import User
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -13,8 +15,10 @@ from django.views.generic import (ListView,
 # Create your views here.
 
 def home(request):
+    top_event = events.annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first()
     context = {
         'posts': Event.objects.all,
+        'top_event' : top_event
     }
     return render(request, 'events/home.html', context)
 
@@ -26,6 +30,10 @@ class EventListView(ListView):
     context_object_name = 'events'
     ordering = ['-date_posted'] #a list of orderings (priority in front I assume). Minus sign is for descending!
     paginate_by = 8
+    extra_context = {
+        'top_event' : Event.objects.all().annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first(),
+        'most_active_shredder' : User.objects.all().annotate(event_count=Count('events')).order_by('-event_count').first()
+    }
 
 class UserEventListView(ListView):
     model = Event
@@ -85,7 +93,13 @@ class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
-    fields = ['title', 'rsvp_goal', 'content', 'image']
+    fields = ['title', 'rsvp_goal', 'content', 'image', 'event_date']
+
+    def get_form(self):
+        form = super().get_form()
+        form.fields['rsvp_goal'].widget = forms.NumberInput(attrs={'placeholder': 5})
+        form.fields['event_date'].widget = forms.TextInput(attrs={'type':'date'})
+        return form
 
     def form_valid(self, form):
         form.instance.author = self.request.user

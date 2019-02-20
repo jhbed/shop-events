@@ -6,7 +6,26 @@
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Create Event</legend>
-                {{ form|crispy }}
+                <div class="form-row">
+                        <div class="form-group col-md-12 mb-0">
+                          {{ form.title|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-12 mb-0">
+                                {{ form.event_date|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-12 mb-0">
+                          {{ form.content|as_crispy_field }}
+                        </div>
+                      </div>
+                      <div class="form-row">
+                            Set a goal for how many people you'd like to see at the event!
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-2 mb-0">
+                          {{ form.rsvp_goal|as_crispy_field }} 
+                          {{ form.image|as_crispy_field }}
+                        </div>
+                      </div>
             </fieldset>
             <div class="form-group">
                 <button class="btn btn-outline-primary" type="submit">Create Event</button>
