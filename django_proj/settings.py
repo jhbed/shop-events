@@ -20,13 +20,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '#iti31gp-yxx*^$o0l-86b7r0q5lmit$eryf+59o8qt83%om#*'
+#SECRET_KEY = '#iti31gp-yxx*^$o0l-86b7r0q5lmit$eryf+59o8qt83%om#*'
+SECRET_KEY = os.environ.get('EVENTS_APP_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG_VAL')
 
 ALLOWED_HOSTS = ['events-app-djang.herokuapp.com']
-
+if DEBUG:
+    ALLOWED_HOSTS.append('localhost')
 
 # Application definition
 
