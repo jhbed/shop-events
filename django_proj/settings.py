@@ -25,7 +25,7 @@ SECRET_KEY = '#iti31gp-yxx*^$o0l-86b7r0q5lmit$eryf+59o8qt83%om#*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['events-app-djang.herokuapp.com']
 
 
 # Application definition
