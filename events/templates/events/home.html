@@ -35,7 +35,7 @@
                   <a class="text-dark" href="{% url 'event-detail' event.pk %}">{{ event.title }}</a>
                 </h3>
                 <div class="mb-1 text-muted">{{ event.date_posted|date:"F d, Y" }}</div>
-                <p class="card-text mb-auto">{{ event.content|truncatewords:30 }}</p>
+                <p class="card-text mb-auto">{{ event.content|truncatewords:7 }}</p>
                 <a href="{% url 'event-detail' event.pk %}">Go to Event</a>
               </div>
               <img class="card-img-right flex-auto d-none d-md-block article-side-img" src="{{ event.image.url }}" alt="Card image cap">
