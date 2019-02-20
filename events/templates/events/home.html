@@ -2,7 +2,7 @@
 
 {% block content %}
       <div class="col-md-12">
-          <h2>Upcoming Events</h2>
+          <!-- <h2>Upcoming Events</h2> -->
       </div>    
     {% for event in events %}
         <!-- <div class="col-md-12">
@@ -32,7 +32,7 @@
                   <strong class="mb-2 text-primary">{{ event.author.username }}</strong>
                 </div>
                 <h3 class="mb-0">
-                  <a class="text-dark" href="{% url 'event-detail' event.pk %}">{{ event.title }}</a>
+                  <a class="article-title" href="{% url 'event-detail' event.pk %}">{{ event.title }}</a>
                 </h3>
                 <div class="mb-1 text-muted">{{ event.date_posted|date:"F d, Y" }}</div>
                 <p class="card-text mb-auto">{{ event.content|truncatewords:7 }}</p>
