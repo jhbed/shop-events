@@ -1,0 +1,22 @@
+from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+from django.urls import reverse
+
+
+# Create your models here.
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    content = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+    #this is the method we need to define to get the absolute url of this object
+    #this structure below takes us to event-detail url pattern, plugging in pk where pk 
+    #falls in the pattern. In this case event/pk
+    def get_absolute_url(self):
+        return reverse('event-detail', kwargs={'pk' : self.pk})
