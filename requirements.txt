@@ -3,6 +3,7 @@ botocore==1.12.98
 certifi==2018.11.29
 dj-database-url==0.5.0
 Django==2.1.7
+django-bootstrap-datepicker-plus==3.0.5
 django-crispy-forms==1.7.2
 django-heroku==0.3.1
 django-storages==1.7.1
@@ -11,10 +12,13 @@ gunicorn==19.9.0
 jmespath==0.9.3
 Pillow==5.4.1
 psycopg2==2.7.7
+pyactiveresource==2.1.2
 pygame==1.9.4
 python-dateutil==2.8.0
 pytz==2018.9
+PyYAML==3.13
 s3transfer==0.2.0
+ShopifyAPI==4.0.0
 six==1.12.0
 urllib3==1.24.1
 whitenoise==4.1.2
