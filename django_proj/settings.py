@@ -138,8 +138,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #BASE_DIR is projects base directory
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #BASE_DIR is projects base directory
 STATIC_URL = '/static/'
+
+
+
+
+
 
 #no matter what OS we're on, this should work since we're using os module
 #media route is the private URL, where the files live on the server
@@ -164,6 +169,12 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 AWS_S3_FILE_OVERWRITE = False
 AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+# S3_URL = '//%s.s3.amazonaws.com/' % AWS_STORAGE_BUCKET_NAME
+# MEDIA_URL = S3_URL + 'media/'
+# MEDIA_ROOT = MEDIA_URL
+#STATIC_URL = S3_URL + 'static/'
 
 if not local:
     django_heroku.settings(locals())
