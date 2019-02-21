@@ -14,7 +14,7 @@ class Event(models.Model):
     attendees = models.ManyToManyField(User, related_name='events')
     rsvp_goal = models.IntegerField(verbose_name="Attendees Goal")
     image = models.ImageField(default='default_event_img.jpg', upload_to='event_pics', verbose_name='Event Image')
-    #event_date = models.DateField()
+    event_date = models.DateField()
 
     def __str__(self):
         return self.title
