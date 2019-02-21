@@ -16,12 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from users import views as user_views
+from shopify_con import views as shopfiy_con_views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('shopify/', include('shopify_con.urls')),
     path('', include('events.urls')),
     path('events/', include('events.urls')),
     path('register/', user_views.register, name='register'),

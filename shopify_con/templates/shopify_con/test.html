@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1>TEST</h1>
+    <div>
+        {% for c in cust%}
+        <h2>{{ c.first_name }}</h2>
+        {% endfor %}
+
+        <h1>Spec: {{spec}}</h1>
+
+        <div>
+                {% for s in spec%}
+                <h2>{{ s.email }}</h2>
+                {% endfor %} 
+        </div>
+    </div>
+</body>
+</html>

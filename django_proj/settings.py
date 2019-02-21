@@ -31,12 +31,14 @@ DEBUG = os.environ.get('DJANGO_DEBUG_VAL') == 'True'
 ALLOWED_HOSTS = ['events-app-djang.herokuapp.com']
 if local:
     ALLOWED_HOSTS.append('localhost')
+    #ALLOWED_HOSTS.append('cfeb9fba.ngrok.io')
 
 # Application definition
 
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'events.apps.EventsConfig',
+    'shopify_con.apps.ShopifyConConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
