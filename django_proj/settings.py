@@ -21,7 +21,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = '#iti31gp-yxx*^$o0l-86b7r0q5lmit$eryf+59o8qt83%om#*'
 local = os.environ.get('LOCAL_MACHINE') == "True"
 SECRET_KEY = os.environ.get('EVENTS_APP_SECRET_KEY')
 
