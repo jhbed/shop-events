@@ -67,16 +67,19 @@
             </div>
             <div class="col-md-4 align-self-start sticky-top" >
             <div class="content-section" >
-                <h3>Sidebar: We could put anything here.</h3>
-                <p class='text-muted'>Not sure what to put though
+                <h3>Community Event Highlights</h3>
+                <!-- <p class='text-muted'>Not sure what to put though -->
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-light">
                         Top Event: <a href="/events/event/{{top_event.pk}}/">{{ top_event.title }}</a>
                     </li>
                     <li class="list-group-item list-group-item-light">Most Active Shredder: {{ most_active_shredder }}</li>
-                    <li class="list-group-item list-group-item-light">Announcements</li>
-                    <li class="list-group-item list-group-item-light">Calendars</li>
-                    <li class="list-group-item list-group-item-light">etc</li>
+                    <li class="list-group-item list-group-item-light">
+                        <p>Announcements:</p>  
+                        <p>{{ announcements }}</p> 
+                    </li>
+                    <!-- <li class="list-group-item list-group-item-light">Calendars</li> -->
+                    <!-- <li class="list-group-item list-group-item-light">etc</li> -->
                 </ul>
                 </p>
             </div>

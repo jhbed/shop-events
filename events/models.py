@@ -24,3 +24,10 @@ class Event(models.Model):
     #falls in the pattern. In this case event/pk
     def get_absolute_url(self):
         return reverse('event-detail', kwargs={'pk' : self.pk})
+
+
+# class Announcement(models.Model):
+#     text = models.TextField()
+
+
+
