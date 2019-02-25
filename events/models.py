@@ -29,5 +29,8 @@ class Event(models.Model):
 class Announcement(models.Model):
     text = models.TextField()
 
+    def __str__(self):
+        return self.text
+
 
 

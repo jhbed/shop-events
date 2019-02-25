@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .models import Event
+from .models import Event, Announcement
 from django import forms
 from django.db.models import Count
 from django.contrib.auth.models import User
@@ -32,7 +32,8 @@ class EventListView(ListView):
     paginate_by = 8
     extra_context = {
         'top_event' : Event.objects.all().annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first(),
-        'most_active_shredder' : User.objects.all().annotate(event_count=Count('events')).order_by('-event_count').first()
+        'most_active_shredder' : User.objects.all().annotate(event_count=Count('events')).order_by('-event_count').first(),
+        'announcements' : Announcement.objects.all()
     }
 
 class UserEventListView(ListView):

@@ -13,7 +13,7 @@
                     class="rounded-circle article-img" 
                     alt="{{event.author.username}}-img"
                   >
-                  <strong class="mb-2 text-primary">{{ event.author.username }}</strong>
+                  <strong class="mb-2 text-primary"><a href="{% url 'user-events' event.author.username %}">{{ event.author.username }}</a></strong>
                 </div>
                 <h3 class="mb-0">
                   <a class="article-title" href="{% url 'event-detail' event.pk %}">{{ event.title }}</a>
