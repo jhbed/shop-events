@@ -26,8 +26,8 @@ class Event(models.Model):
         return reverse('event-detail', kwargs={'pk' : self.pk})
 
 
-# class Announcement(models.Model):
-#     text = models.TextField()
+class Announcement(models.Model):
+    text = models.TextField()
 
 
 
