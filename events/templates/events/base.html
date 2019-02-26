@@ -65,29 +65,7 @@
                 </div>
             
             </div>
-            <div class="col-md-4 align-self-start sticky-top" >
-            <div class="content-section" >
-                <h3>Community Highlights</h3>
-                <!-- <p class='text-muted'>Not sure what to put though -->
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-light">
-                        Top Event: <a href="/events/event/{{top_event.pk}}/">{{ top_event.title }}</a>
-                    </li>
-                    {%if most_active_shredder %}
-                        <li class="list-group-item list-group-item-light">Most Active Shredder: <a href="">{{ most_active_shredder }}</a></li>
-                    {% endif %}
-                    
-                    <li class="list-group-item list-group-item-light">
-                        <p>Announcements:</p>  
-                        {% for announcement in announcements %}
-                            <p>{{ announcement.text }}</p>
-                        {% endfor%} 
-                    </li>
-                    <!-- <li class="list-group-item list-group-item-light">Calendars</li> -->
-                    <!-- <li class="list-group-item list-group-item-light">etc</li> -->
-                </ul>
-                </p>
-            </div>
+            {% block sidebar %}{% endblock sidebar %}
             {% block sidebutton %}{% endblock sidebutton %}
             </div>
         </div>

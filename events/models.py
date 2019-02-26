@@ -32,5 +32,12 @@ class Announcement(models.Model):
     def __str__(self):
         return self.text
 
+class EventAnnouncement(models.Model):
+    text = models.TextField()
+    event = models.OneToOneField(Event, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.text
+
 
 

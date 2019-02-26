@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .models import Event, Announcement
+from django.urls import reverse_lazy
+from .models import Event, Announcement, EventAnnouncement
 from django import forms
 from django.db.models import Count
 from django.contrib.auth.models import User
@@ -56,7 +57,7 @@ class EventDetailView(SingleObjectMixin, View):
     http_method_names = ['post', 'get']
 
     def get(self, request, *args, **kwargs):
-
+        
         event = self.get_object()
         goal = event.rsvp_goal
         width_ratio = (event.attendees.count() / goal) * 100
@@ -109,7 +110,16 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
-    fields = ['title', 'content', 'image']
+    fields = ['title', 'rsvp_goal', 'content', 'image', 'event_date']
+    extra_context = {
+        'update' : True
+    }
+
+    def get_form(self):
+        form = super().get_form()
+        form.fields['rsvp_goal'].widget = forms.NumberInput(attrs={'placeholder': 5})
+        form.fields['event_date'].widget = forms.TextInput(attrs={'type':'date'})
+        return form
 
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -121,6 +131,38 @@ class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
+
+class EventAnnouncementUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = EventAnnouncement
+    fields = ['text']
+
+    def test_func(self):
+        announcement = self.get_object()
+        return self.request.user == announcement.event.author
+
+    def get_success_url(self):
+        announcement = self.get_object()
+        return reverse_lazy('event-detail', kwargs={'pk': announcement.event.pk})
+
+class EventAnnouncementCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = EventAnnouncement
+    fields = ['text']
+
+    def test_func(self):
+        event = Event.objects.get(pk=self.request.GET.get('event', ''))
+        return self.request.user == event.author
+
+    def get_success_url(self):
+        event = Event.objects.get(pk=self.request.GET.get('event', ''))
+        return reverse_lazy('event-detail', kwargs={'pk': event.pk})
+
+    def form_valid(self, form):
+        form.instance.event = Event.objects.get(pk=self.request.GET.get('event', ''))
+        #we're overriding super.form_valid(), fixing the form, then calling it, passing in the form  
+        return super().form_valid(form)
+
+
+
 
 
 

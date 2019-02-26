@@ -5,7 +5,13 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Create Event</legend>
+                <legend class="border-bottom mb-4">
+                    {% if update %}
+                    Update Event
+                    {% else %}
+                    Create Event
+                    {% endif %}
+                </legend>
                 <div class="form-row">
                         <div class="form-group col-md-12 mb-0">
                           {{ form.title|as_crispy_field }}
@@ -28,7 +34,14 @@
                       </div>
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-primary" type="submit">Create Event</button>
+                <button class="btn btn-outline-primary" type="submit">
+                  {% if update %}
+                  Update Event
+                  {% else %}
+                  Create Event
+                  {% endif %}
+                  
+                </button>
             </div>
         </form>
     </div>
