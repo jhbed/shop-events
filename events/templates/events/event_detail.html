@@ -42,7 +42,7 @@
         <ul class="list-group">
             <li class="list-group-item list-group-item-light">Host: {{ object.author }}</li>
             <li class="list-group-item list-group-item-light">
-                Event Date: <a href="/events/event/{{top_event.pk}}/">{{ object.event_date|date:"F d, Y" }}</a>
+                Event Date: {{ object.event_date|date:"F d, Y" }}
             </li>
             <li class="list-group-item list-group-item-light">Attendees: {{ attendees_count }}</li>
             
