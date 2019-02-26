@@ -44,7 +44,12 @@
             <li class="list-group-item list-group-item-light">
                 Event Date: {{ object.event_date|date:"F d, Y" }}
             </li>
-            <li class="list-group-item list-group-item-light">Attendees: {{ attendees_count }}</li>
+            <li class="list-group-item list-group-item-light">
+                Attendees: 
+                {%for attendee in object.attendees.all %}
+                    {{attendee.username}}, 
+                {% endfor %}
+            </li>
             
             
             <li class="list-group-item list-group-item-light">
