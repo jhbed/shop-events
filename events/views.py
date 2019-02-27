@@ -33,7 +33,7 @@ class EventListView(ListView):
     ordering = ['-date_posted'] #a list of orderings (priority in front I assume). Minus sign is for descending!
     paginate_by = 8
     extra_context = {
-        'top_event' : Event.objects.all().annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first(),
+        #'top_event' : Event.objects.all().annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first(),
         'most_active_shredder' : User.objects.all().annotate(event_count=Count('events')).order_by('-event_count').first(),
         'announcements' : Announcement.objects.all()
     }
