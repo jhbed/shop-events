@@ -15,6 +15,7 @@ class Event(models.Model):
     rsvp_goal = models.IntegerField(verbose_name="Attendees Goal")
     image = models.ImageField(default='default_event_img.jpg', upload_to='event_pics', verbose_name='Event Image')
     event_date = models.DateField()
+    location = models.CharField(max_length=500)
 
     def __str__(self):
         return self.title

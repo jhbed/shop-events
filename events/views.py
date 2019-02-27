@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -59,13 +60,17 @@ class EventDetailView(SingleObjectMixin, View):
     def get(self, request, *args, **kwargs):
         
         event = self.get_object()
+        location = event.location
+        location = location.replace(' ', '+')
         goal = event.rsvp_goal
         width_ratio = (event.attendees.count() / goal) * 100
         width_ratio = str(width_ratio) + '%'
         context = {
             'object' : event,
             'attendees_count' : event.attendees.count(),
-            'width_ratio' : width_ratio
+            'width_ratio' : width_ratio,
+            'gmaps_key' : os.environ.get('GMAPS_API_KEY'),
+            'location' : location
         }
 
         return render(request, 'events/event_detail.html', context)
@@ -95,7 +100,7 @@ class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
-    fields = ['title', 'rsvp_goal', 'content', 'image', 'event_date']
+    fields = ['title', 'location','rsvp_goal', 'content', 'image', 'event_date']
 
     def get_form(self):
         form = super().get_form()
@@ -110,7 +115,7 @@ class EventCreateView(LoginRequiredMixin, CreateView):
 
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
-    fields = ['title', 'rsvp_goal', 'content', 'image', 'event_date']
+    fields = ['title', 'location','rsvp_goal', 'content', 'image', 'event_date']
     extra_context = {
         'update' : True
     }
