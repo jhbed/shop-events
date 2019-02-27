@@ -16,14 +16,6 @@ from django.views.generic import (ListView,
                                   View)
 # Create your views here.
 
-# def home(request):
-#     top_event = events.annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first()
-#     context = {
-#         'posts': Event.objects.all,
-#         'top_event' : top_event
-#     }
-#     return render(request, 'events/home.html', context)
-
 
 class EventListView(ListView):
     model = Event
