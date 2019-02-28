@@ -1,4 +1,5 @@
 import os
+from django_proj.common.util.geo import get_distance
 import googlemaps
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -24,13 +25,15 @@ class CompareLatLon(View):
         return HttpResponse('only accessible from post')
 
     def post(self, request, *args, **kwargs):
-        gmaps = googlemaps.Client(key=os.environ.get('GMAPS_GEO_API_KEY'))
+        
         event = Event.objects.get(pk=request.POST['event_pk'])
-        geocode_result = gmaps.geocode(event.location)
-        lat = request.POST['latitude']
-        lon = request.POST['longitude']
-        latlon = geocode_result
-        return HttpResponse(latlon)
+        lat = float(request.POST['latitude'])
+        lon = float(request.POST['longitude'])
+        c1 = (float(event.latitude), float(event.longitude))
+        c2 = (lat, lon)
+        dist = get_distance(c1, c2)
+        #return HttpResponse('hello')
+        return HttpResponse('distance between you and event is: ' + str(dist))
         #return redirect('login')
         #return JsonResponse({'success' : 'hi'})
 
