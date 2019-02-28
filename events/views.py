@@ -1,4 +1,6 @@
 import os
+import googlemaps
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -16,6 +18,22 @@ from django.views.generic import (ListView,
                                   View)
 # Create your views here.
 
+class CompareLatLon(View):
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('only accessible from post')
+
+    def post(self, request, *args, **kwargs):
+        gmaps = googlemaps.Client(key=os.environ.get('GMAPS_GEO_API_KEY'))
+        event = Event.objects.get(pk=request.POST['event_pk'])
+        geocode_result = gmaps.geocode(event.location)
+        lat = request.POST['latitude']
+        lon = request.POST['longitude']
+        latlon = geocode_result
+        return HttpResponse(latlon)
+        #return redirect('login')
+        #return JsonResponse({'success' : 'hi'})
+
 
 class EventListView(ListView):
     model = Event
@@ -25,7 +43,7 @@ class EventListView(ListView):
     ordering = ['-date_posted'] #a list of orderings (priority in front I assume). Minus sign is for descending!
     paginate_by = 8
     extra_context = {
-        'top_event' : Event.objects.all().annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first(),
+        #'top_event' : Event.objects.all().annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first(),
         'most_active_shredder' : User.objects.all().annotate(event_count=Count('events')).order_by('-event_count').first(),
         'announcements' : Announcement.objects.all()
     }
@@ -101,6 +119,12 @@ class EventCreateView(LoginRequiredMixin, CreateView):
         return form
 
     def form_valid(self, form):
+        gmaps = googlemaps.Client(key=os.environ.get('GMAPS_GEO_API_KEY'))
+        geocode_result = gmaps.geocode(form.instance.location)
+        data = geocode_result[0]
+        form.instance.formatted_address = data['formatted_address']
+        form.instance.latitude = data['geometry']['location']['lat']
+        form.instance.longitude = data['geometry']['location']['lng']
         form.instance.author = self.request.user
         #we're overriding super.form_valid(), fixing the form, then calling it, passing in the form  
         return super().form_valid(form)

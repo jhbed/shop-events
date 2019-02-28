@@ -12,10 +12,28 @@ $(document).ready(function(){
         }
     }
 
+    function handleData(data) {
+        console.log('response is' + data)
+    }
+
     function showPosition(position) {
-        var latlon = position.coords.latitude + "," + position.coords.longitude;
-        var img_url = "https://maps.googleapis.com/maps/api/staticmap?center="+latlon+"&zoom=14&size=400x300&sensor=false&key=AIzaSyCLkp3RYpurjjx_oBXrUQHLfDkAZWRHP3Y";
-        $('.mapholder').html("<img src='"+img_url+"'>");
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
+        console.log(lat + ', ' + lon)
+        var url = "/events/compare_latlon/";
+        var data = {latitude:lat, longitude:lon, csrfmiddlewaretoken: csrf, event_pk:event_pk};
+        //console.log(data)
+        //$.post(url, data, handleData);
+        
+        $.ajax({
+            url: url,
+            type: 'post', // This is the default though, you don't actually need to always mention it
+            data: data,
+            success: handleData,
+            failure: function(data) { 
+                console.log('Got an error dude');
+            }
+        });
     }
 
     function initMap() {
@@ -31,5 +49,6 @@ $(document).ready(function(){
     $('#map-button').on('click', getLocation);
 
     console.log('test')
+    
 
 });

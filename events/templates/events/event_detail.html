@@ -97,11 +97,11 @@
         RSVP to Event!
     </button>
 </div>
-<!-- <div class='mt-1'>
+<div class='mt-1'>
     <button type="button" class="btn btn-primary btn-block" id="map-button">
         Check in to Event!
     </button>
-</div> -->
+</div>
 
  {% endblock sidebutton %}
 
@@ -134,7 +134,11 @@
 {% endblock modal %}
 
 {% block additional_scripts %}
-
+<script type="text/javascript"> 
+    var csrf = '{{ csrf_token }}';
+    var event_pk = '{{ object.pk }}'; 
+</script>
+<script src="{% static 'events/js/map_scripts.js' %}"></script>
 {% endblock additional_scripts %}
       
 
