@@ -83,24 +83,34 @@
 
 
 {% block sidebutton %}
-<div class="progress">
-    <div class="progress-bar" role="progressbar" style="width: {{ width_ratio }}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="1">
-        {{attendees_count}}/{{object.rsvp_goal}}</div>
-    </div>
-<div>
-        <p>
-            Attendees: {{ attendees_count }}
-        </p>
- </div>
-<div>
-    <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal">
-        RSVP to Event!
-    </button>
-</div>
-<div class='mt-1'>
-    <button type="button" class="btn btn-primary btn-block" id="map-button">
-        Check in to Event!
-    </button>
+
+{% if event_is_today != True %}
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: {{ width_ratio }}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="1">
+            {{attendees_count}}/{{object.rsvp_goal}}</div>
+        </div>
+    <div>
+{% endif %}
+
+    {% if event_is_today %}
+    <div>
+            <p>
+                Attendees: {{ check_in_count }}
+            </p>
+        </div>
+        <button type="button" class="mb-5 btn btn-primary btn-block" id="map-button">
+            Check in to Event!
+        </button>
+    {% else %}
+        <div>
+                <p>
+                    RSVPs: {{ attendees_count }}
+                </p>
+        </div>
+        <button type="button" class="mb-5 btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal">
+            RSVP to Event!
+        </button>
+    {% endif %}
 </div>
 
  {% endblock sidebutton %}

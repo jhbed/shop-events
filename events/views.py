@@ -1,4 +1,6 @@
 import os
+from django.utils import timezone
+from django.contrib import messages
 from django_proj.common.util.geo import get_distance
 import googlemaps
 from django.http import HttpResponse, JsonResponse
@@ -25,13 +27,34 @@ class CompareLatLon(View):
         return HttpResponse('only accessible from post')
 
     def post(self, request, *args, **kwargs):
+
+        if request.user.is_authenticated:
+            MAX_DIST_FROM_EVENT = 2 #expressed in km
+            event = Event.objects.get(pk=request.POST['event_pk'])
+            lat = float(request.POST['latitude'])
+            lon = float(request.POST['longitude'])
+            c1 = (float(event.latitude), float(event.longitude))
+            c2 = (lat, lon)
+            dist = get_distance(c1, c2)
+            if dist < 2:
+                event.checked_in.add(request.user)
+                s = 'Successfully checked you in'
+                #messages.success(request, s)
+                return HttpResponse(s)
+            else:
+                e = 'You must be within 1 mile from the event to check in!'
+                #messages.error(request, e)
+                return HttpResponse(e)
+        else:
+            e = 'You must be logged in to check in to the event.'
+            #messages.error(request, e)
+            return HttpResponse(e)
+
         
-        event = Event.objects.get(pk=request.POST['event_pk'])
-        lat = float(request.POST['latitude'])
-        lon = float(request.POST['longitude'])
-        c1 = (float(event.latitude), float(event.longitude))
-        c2 = (lat, lon)
-        dist = get_distance(c1, c2)
+
+        
+
+
         #return HttpResponse('hello')
         return HttpResponse('distance between you and event is: ' + str(dist))
         #return redirect('login')
@@ -71,19 +94,24 @@ class EventDetailView(SingleObjectMixin, View):
     http_method_names = ['post', 'get']
 
     def get(self, request, *args, **kwargs):
-        
         event = self.get_object()
         location = event.location
         location = location.replace(' ', '+')
         goal = event.rsvp_goal
         width_ratio = (event.attendees.count() / goal) * 100
         width_ratio = str(width_ratio) + '%'
+
+        today = timezone.now().date()
+        event_is_today = today == event.event_date
+
         context = {
             'object' : event,
             'attendees_count' : event.attendees.count(),
+            'check_in_count' : event.checked_in.count(),
             'width_ratio' : width_ratio,
             'gmaps_key' : os.environ.get('GMAPS_API_KEY'),
-            'location' : location
+            'location' : location,
+            'event_is_today' : event_is_today
         }
 
         return render(request, 'events/event_detail.html', context)
