@@ -107,3 +107,11 @@ body {
 #ajax-success {
   display: none;
 }
+
+#not-today-button {
+  display: none;
+}
+
+#today-button {
+  display: none
+}

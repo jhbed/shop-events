@@ -111,7 +111,9 @@ class EventDetailView(SingleObjectMixin, View):
             'width_ratio' : width_ratio,
             'gmaps_key' : os.environ.get('GMAPS_API_KEY'),
             'location' : location,
-            'event_is_today' : event_is_today
+            'event_day' : event.event_date.day,
+            'event_month' : event.event_date.month,
+            'event_year' : event.event_date.year
         }
 
         return render(request, 'events/event_detail.html', context)

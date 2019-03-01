@@ -28,7 +28,13 @@ $(document).ready(function(){
         var lon = position.coords.longitude;
         console.log(lat + ', ' + lon)
         var url = "/events/compare_latlon/";
-        var data = {latitude:lat, longitude:lon, csrfmiddlewaretoken: csrf, event_pk:event_pk};
+        
+        var data = {
+                latitude:lat, 
+                longitude:lon, 
+                csrfmiddlewaretoken: csrf, 
+                event_pk:event_pk
+            };
         //console.log(data)
         //$.post(url, data, handleData);
         
@@ -44,7 +50,13 @@ $(document).ready(function(){
     }
 
     $('#map-button').on('click', getLocation);
-
-    console.log('test')
+    var today = new Date();
+    console.log(today)
+    console.log(event_month == today.getMonth + 1)
+    if(event_day == today.getDate() && event_month == today.getMonth() + 1 && event_year == today.getFullYear()) {
+        $('#today-button').show();
+    } else {
+        $('#not-today-button').show();
+    }
 
 });
