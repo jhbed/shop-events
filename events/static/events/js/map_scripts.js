@@ -18,6 +18,9 @@ $(document).ready(function(){
         } else {
             var tag = '#ajax-error'
         }
+
+
+
         $(tag).html(data)
         $(tag).show()
     }
@@ -44,17 +47,20 @@ $(document).ready(function(){
             data: data,
             success: handleData,
             failure: function(data) { 
-                console.log('Got an error dude');
+                console.log('There was an ajax error. This msg is sent from js code in the POST Ajax call');
             }
         });
     }
 
     $('#map-button').on('click', getLocation);
     var today = new Date();
-    console.log(today)
-    console.log(event_month == today.getMonth + 1)
+    //console.log(today)
+    //console.log(event_month == today.getMonth + 1)
+    var event_date = new Date(event_year, event_month-1, event_day)
     if(event_day == today.getDate() && event_month == today.getMonth() + 1 && event_year == today.getFullYear()) {
         $('#today-button').show();
+    } else if (event_date < today) {
+        $('#day-passed').show();
     } else {
         $('#not-today-button').show();
     }

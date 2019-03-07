@@ -115,3 +115,7 @@ body {
 #today-button {
   display: none
 }
+
+#day-passed {
+  display: none
+}

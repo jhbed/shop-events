@@ -101,8 +101,9 @@ class EventDetailView(SingleObjectMixin, View):
         width_ratio = (event.attendees.count() / goal) * 100
         width_ratio = str(width_ratio) + '%'
 
-        today = timezone.now().date()
-        event_is_today = today == event.event_date
+        #today = timezone.now().date()
+        #event_is_today = today == event.event_date
+        #event_is_passed = today > event.event_date
 
         context = {
             'object' : event,
@@ -221,5 +222,5 @@ class EventAnnouncementCreateView(LoginRequiredMixin, UserPassesTestMixin, Creat
 
 
 
-def about(request):
+def test(request):
     return render(request, 'events/about.html')

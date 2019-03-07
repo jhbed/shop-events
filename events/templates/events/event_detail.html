@@ -1,122 +1,135 @@
 {% extends "events/base.html" %}
 {% load static %}
-{% block content %}
-    <div class="col-md-12">
-        <article class="media content-section">
-            <img src="{{ object.author.profile.image.url }}" 
+{% block fullwidth_content %}
+<div class="container-fluid content-section">
+    <div class="row">
+      <div class="col-xl-9 mx-auto">
+        <h1 class="display-3 text-center mt-5 mb-1">{{ object.title }}</h1>
+        {% if object.author == user %}
+        <div class="text-center">
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' object.pk %}">
+                Update Event
+            </a>
+            <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' object.pk %}">
+                    Delete Event
+            </a>
+        </div>
+        {% endif %}
+        <hr/>
+      </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-md-12 mb-2 text-center">
+        
+            <p>
+                Hosted by: 
+            </p>
+            <h5>
+                <img src="{{ object.author.profile.image.url }}" 
                 class="rounded-circle article-img" 
                 alt="{{object.author.username}}-img"
-            >
-            <div class="media-body">
-                <div class="article-metadata">
-                <a class="mr-2" href="{% url 'user-events' object.author.username %}">{{ object.author }}</a>
-                <small class="text-muted">{{ object.event_date|date:"F d, Y" }}</small>
-                {% if object.author == user %}
-                    <div>
-                        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' object.pk %}">
-                            Update Event
-                        </a>
-                        <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' object.pk %}">
-                                Delete Event
-                        </a>
-                    </div>
-                {% endif %}
-                
+                >
+                {{ object.author }}
+            </h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col text-center">
+                <div id="not-today-button">
+                    <button type="button" class="mb-2 btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        RSVP to Event!
+                    </button>
                 </div>
-                <h2 class="article-title">{{ object.title }}</h2>
-                {% if object.image.name != 'default_event_img.jpg' %}
-                    <img class="article-main-img" src="{{ object.image.url }}" alt="Card image cap">
-                {% endif %}
-                <p class="article-content">{{ object.content }}</p>
+                    
+                    <div id="today-button">
+                        <button type="button" class="mb-2 btn btn-primary" id="map-button">
+                            Check in to Event!
+                        </button> 
+                    </div>
+                    
+                    <div id="day-passed">
+                        <div>
+                            <p>
+                                Attendees: {{ check_in_count }}
+                            </p>
+                            <p>
+                                <b>This event has already completed.</b>
+                            </p>
+                        </div>
+                    </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row mt-1">
+        <div class="col-md-4">
+            <div class="content-section">
+                <h5 class="text-center">Details:</h5>
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-light">
+                        Event Date: {{ object.event_date|date:"F d, Y" }}
+                    </li>
+                    <li class="list-group-item list-group-item-light">
+                        <p>RSVP Goal Progress: </p>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ width_ratio }}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="1">
+                                {{attendees_count}}/{{object.rsvp_goal}}
+                            </div>
+                        </div>  
+                    </li> 
+                    <li class="list-group-item list-group-item-light">
+                        <p>Event Announcements:</p>  
+                        <p>{{ object.eventannouncement.text }}</p>
+                        {% if object.author == user %}
+                            {% if object.eventannouncement %}
+                                <a href="{% url 'update-event-announcement' object.eventannouncement.pk %}">Update Announcement</a>
+                            {% else %}
+                                <a href="{% url 'create-event-announcement' %}?event={{ object.pk }}">Create Announcement</a>
+                            {% endif %}
+                        {% endif %}
+                    </li>
+                    <li class="list-group-item list-group-item-light">
+                            Description: {{ object.content }}
+                    </li>
+                </ul>
+        
             </div>
-        </article>
-    </div>
-{% endblock content %}
-
-
-{% block sidebar %}
-<div class="col-md-4 align-self-start sticky-top" >
-    <div class="content-section" >
-        <h3>Event Details</h3>
-        <!-- <p class='text-muted'>Not sure what to put though -->
-        <ul class="list-group">
-            <li class="list-group-item list-group-item-light">Host: {{ object.author }}</li>
-            <li class="list-group-item list-group-item-light">
-                Event Date: {{ object.event_date|date:"F d, Y" }}
-            </li>
-            <li class="list-group-item list-group-item-light">
-                Attendees: 
-                {%for attendee in object.attendees.all %}
-                    {{attendee.username}}, 
-                {% endfor %}
-            </li>
-            
-            
-            <li class="list-group-item list-group-item-light">
-                <p>Event Announcements:</p>  
-                <p>{{ object.eventannouncement.text }}</p>
-                {% if object.author == user %}
-                    {% if object.eventannouncement %}
-                        <a href="{% url 'update-event-announcement' object.eventannouncement.pk %}">Update Announcement</a>
-                    {% else %}
-                        <a href="{% url 'create-event-announcement' %}?event={{ object.pk }}">Create Announcement</a>
-                    {% endif %}
-                {% endif %}
-            </li>
-            <li class="list-group-item list-group-item-light">
-                    <p>Location: {{ object.location }}</p>
-                    <iframe
-                        width="100%"
-                        height="350"
-                        frameborder="0" style="border:0"
-                        src="https://www.google.com/maps/embed/v1/place?key={{ gmaps_key }}
-                        &q={{ location }}" allowfullscreen>
-                  </iframe>
-            </li>
-            <!-- <li class="list-group-item list-group-item-light">Calendars</li> -->
-            <!-- <li class="list-group-item list-group-item-light">etc</li> -->
-        </ul>
-        </p>
-    </div>
-{% endblock sidebar %}
-
-
-
-{% block sidebutton %}
-
-
-<div id="not-today-button">
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: {{ width_ratio }}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="1">
-            {{attendees_count}}/{{object.rsvp_goal}}
         </div>
-    </div>   
-    <div>
-            <p>
-                RSVPs: {{ attendees_count }}
-            </p>
-    </div>
-    <button type="button" class="mb-2 btn btn-primary btn-block" data-toggle="modal" data-target="#exampleModal">
-            RSVP to Event!
-    </button>
-</div>
-
-<div id="today-button">
-        <div>
-            <p>
-                Attendees: {{ check_in_count }}
-            </p>
+        <div class="col-md-4">
+            <div class="content-section">
+                <h5 class="text-center">Location:</h5>
+                <h6 class="text-center">{{ object.location }}</h6>
+                <iframe
+                    width="100%"
+                    height="350"
+                    frameborder="0" style="border:0"
+                    src="https://www.google.com/maps/embed/v1/place?key={{ gmaps_key }}
+                    &q={{ location }}" allowfullscreen>
+                </iframe>
+            </div>
         </div>
-        <button type="button" class="mb-2 btn btn-primary btn-block" id="map-button">
-            Check in to Event!
-        </button> 
+        <div class="col-md-4">
+            <div class="content-section">
+                <h5 class="text-center">People Going:</h5>
+                <ul class="list-group">
+                    {%for attendee in object.attendees.all %}
+                        <li class="list-group-item list-group-item-light">
+                            <img src="{{ attendee.profile.image.url }}" 
+                            class="rounded-circle article-img" 
+                            alt="{{ attendee.username }}-img"
+                            >
+                            {{attendee.username}}
+                        </li>
+                    {% endfor %}
+                        
+
+            </div>
+        </div>
+    </div>
 </div>
-<div id="ajax-success" class="alert alert-success"></div>
-<div id="ajax-error" class="alert alert-danger"></div> 
+{% endblock fullwidth_content %}
 
- {% endblock sidebutton %}
-
- {% block modal %}
+{% block modal %}
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -154,9 +167,3 @@
 </script>
 <script src="{% static 'events/js/map_scripts.js' %}"></script>
 {% endblock additional_scripts %}
-      
-
-
-
-
-

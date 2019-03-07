@@ -33,7 +33,7 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <div class="navbar-nav mr-auto">
                 <!-- <a class="nav-item nav-link" href="{% url 'events-home' %}">Home</a> -->
-                <!-- <a class="nav-item nav-link" href="{% url 'about' %}">About</a> -->
+                
                 </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
@@ -50,26 +50,12 @@
             </div>
         </nav>
     </header>
-    <main role="main" class="container">
-        <div class="row">
-            <div class="col-md-8">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                
-                <div class="row">
-                    {% block content %}{% endblock %}
-                </div>
-            
-            </div>
-            {% block sidebar %}{% endblock sidebar %}
-            {% block sidebutton %}{% endblock sidebutton %}
-            </div>
+    <main role="main">
+
+        <div class="container">
+            {% block generic_content %}{% endblock generic_content %}
         </div>
+        {% block fullwidth_content %}{% endblock fullwidth_content%}
     </main>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
