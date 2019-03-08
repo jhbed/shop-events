@@ -21,7 +21,7 @@ from django.views.generic import (ListView,
                                   DeleteView, 
                                   View)
 # Create your views here.
-
+#adding git
 class PostImage(View):
 
     def post(self, request, *args, **kwargs):
