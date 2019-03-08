@@ -59,10 +59,18 @@ $(document).ready(function(){
     var event_date = new Date(event_year, event_month-1, event_day)
     if(event_day == today.getDate() && event_month == today.getMonth() + 1 && event_year == today.getFullYear()) {
         $('#today-button').show();
+        //$('#checkins').show();
     } else if (event_date < today) {
         $('#day-passed').show();
     } else {
         $('#not-today-button').show();
     }
+
+    $(".gal-img").on("click", function() {
+        $('#imagepreview').attr('src', $(this).attr('src')); // here asign the image to the modal when the user click the enlarge link
+        //alert('hello' + $(this).data('user'))
+        $('#imagemodal').modal('show'); // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
+    });
+     
 
 });

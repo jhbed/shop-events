@@ -5,3 +5,7 @@ class CommentForm(forms.Form):
                               label="Leave a Comment",
                               required=True)
     event = forms.DecimalField()
+
+class ImageForm(forms.Form):
+    image = forms.ImageField()
+    event = forms.DecimalField()

@@ -20,5 +20,6 @@ urlpatterns = [
     path('event/new/', view=EventCreateView.as_view(), name='event-create'),
     path('test/', views.test, name='test'),
     path('compare_latlon/', views.CompareLatLon.as_view(), name='compare-latlon'),
-    path('post_comment/', views.PostComment.as_view(), name='post-comment')
+    path('post_comment/', views.PostComment.as_view(), name='post-comment'),
+    path('post_image/', views.PostImage.as_view(), name='post-image')
 ]

@@ -67,7 +67,38 @@ class Comment(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
 
+class EventImage(models.Model):
+    image = models.ImageField(default='default_event_img.jpg', upload_to='event_pics', verbose_name='Event Image')
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='event_images')
+    posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='event_images_posted')
 
+    # def save(self, *args, **kwargs):
+    #     import os
+    #     from PIL import Image
+    #     from django.core.files.storage import default_storage as storage
+    #     if not self.image:
+    #         return ""
+            
+    #     super(EventImage, self).save(*args, **kwargs)
+    #     file_path = self.image.name
+    #     filename_new, filename_ext = os.path.splitext(file_path)
+
+    #     try:
+    #         # resize the original image and return url path of the thumbnail
+    #         f = storage.open(file_path, 'r')
+    #         image = Image.open(f)
+    #         width, height = image.size
+
+    #         if width > 300 or height > 300:
+    #             output_size = (300,300)
+    #             image.thumbnail(output_size)
+    #             f_thumb = storage.open(filename_new, "w")
+    #             image.save(f_thumb, "JPEG")
+    #             f_thumb.close()
+    #         return "success"
+    #     except:
+    #         return "error"
+        
 
 
 

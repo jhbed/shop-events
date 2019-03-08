@@ -42,22 +42,36 @@
                     </button>
                 </div>
                     
-                    <div id="today-button">
-                        <button type="button" class="mb-2 btn btn-primary" id="map-button">
-                            Check in to Event!
-                        </button> 
+                <div id="today-button">
+                    <div>
+                        <p>
+                            Attendees: {{ check_in_count }}
+                        </p>
                     </div>
+                    <button type="button" class="mb-2 btn btn-primary" id="map-button">
+                        Check in to Event!
+                    </button> 
+                </div>
                     
-                    <div id="day-passed">
-                        <div>
-                            <p>
-                                Attendees: {{ check_in_count }}
-                            </p>
-                            <p>
-                                <b>This event has already completed.</b>
-                            </p>
-                        </div>
+                <div id="day-passed">
+                    <div>
+                        <p>
+                            Attendees: {{ check_in_count }}
+                        </p>
+                        <p>
+                            <b>This event has already completed.</b>
+                        </p>
                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4" ></div>
+                    <div class="col-md-4">
+                        <div id="ajax-success" class="alert alert-success"></div>
+                        <div id="ajax-error" class="alert alert-danger"></div> 
+                    </div>
+                    <div class="col-md-4" ></div>
+                </div>
+
         </div>
     </div>
 </div>
@@ -171,6 +185,26 @@
         <div class="col-md-4">
             <div class="content-section">
                 <h5>Photo Gallery:</h5>
+                <div class="row text-center text-lg-left">
+                    {% for img in images %}
+                    <div class="col-lg-6 col-md-6 col-6">
+                        <div class="d-block mb-4 h-100">
+                            
+                        <img 
+                             class="gal-img img-fluid img-thumbnail hov" 
+                             src="{{ img.url }}" 
+                             alt="{{ img.posted_by.username }}-posted-img"
+                        >
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <form action="/events/post_image/" enctype='multipart/form-data' method="post">
+                        {% csrf_token %}
+                        {{ image_form.image|as_crispy_field }}
+                        {{ image_form.event.as_hidden }}
+                        <button type="submit" class="btn btn-secondary pull-right">Add Image</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -204,6 +238,23 @@
     </div>
 </div>
 {% endblock modal %}
+
+{% block image_modal %}
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <p>Event Image:</p>
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            
+        </div>
+        <div class="modal-body text-center">
+            <img src="" id="imagepreview" style="width: 450px;" >
+        </div>
+        </div>
+    </div>
+    </div>
+{% endblock image_modal %}
 
 {% block additional_scripts %}
 <script type="text/javascript"> 

@@ -1,5 +1,5 @@
 import os
-from .forms import CommentForm
+from .forms import CommentForm, ImageForm
 from django.utils import timezone
 from django.contrib import messages
 from django_proj.common.util.geo import get_distance
@@ -8,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from .models import Event, Announcement, EventAnnouncement, Comment
+from .models import Event, Announcement, EventAnnouncement, Comment, EventImage
 from django import forms
 from django.db.models import Count
 from django.contrib.auth.models import User
@@ -22,6 +22,32 @@ from django.views.generic import (ListView,
                                   View)
 # Create your views here.
 
+class PostImage(View):
+
+    def post(self, request, *args, **kwargs):
+        form = ImageForm(request.POST or None, request.FILES or None)
+
+        if request.user.is_authenticated:
+            if not form.is_valid():
+                return HttpResponse('invalid image...')
+            else:
+                event_pk = form.cleaned_data['event']
+                img = form.cleaned_data['image']
+                event = Event.objects.get(pk=event_pk)
+                event_image = EventImage(image=img, event=event, posted_by=request.user)
+                event_image.save()
+                return redirect('event-detail', event_pk)
+
+        else:
+            if not form.is_valid():
+                return HttpResponse('invalid image...')
+            else:
+                event_pk = form.cleaned_data['event']
+                messages.error(request, 'Must be logged in to post a picture')
+                return redirect('event-detail', event_pk)
+        
+
+
 
 class PostComment(View):
 
@@ -31,16 +57,30 @@ class PostComment(View):
     def post(self, request, *args, **kwargs):
 
         form = CommentForm(request.POST)
-        if not form.is_valid():
-            return HttpResponse('invalid comment...')
+
+        if request.user.is_authenticated:
+            if not form.is_valid():
+                return HttpResponse('invalid comment...')
+            else:
+                comment = form.cleaned_data['comment']
+                event_pk = form.cleaned_data['event']
+                event = Event.objects.get(pk=event_pk)
+                user = request.user 
+                comment_obj = Comment(text=comment, event=event, user=user)
+                comment_obj.save()
+                return redirect('event-detail', event_pk)
         else:
-            comment = form.cleaned_data['comment']
-            event_pk = form.cleaned_data['event']
-            event = Event.objects.get(pk=event_pk)
-            user = request.user 
-            comment_obj = Comment(text=comment, event=event, user=user)
-            comment_obj.save()
-            return redirect('event-detail', event_pk)
+            if not form.is_valid():
+                return HttpResponse('invalid comment...')
+            else:
+                event_pk = form.cleaned_data['event']
+                messages.error(request, 'Must be logged in to comment')
+                return redirect('event-detail', event_pk)
+
+
+
+
+            
 
 class CompareLatLon(View):
 
@@ -124,6 +164,11 @@ class EventDetailView(SingleObjectMixin, View):
             'event' : event.pk
         }
         form = CommentForm(initial=data)
+        image_form = ImageForm(initial=data)
+        if event.image.name != 'default_event_img.jpg':
+            images = [event.image] + [img.image for img in event.event_images.all()]
+        else: 
+            images = [img.image for img in event.event_images.all()]
         context = {
             'object' : event,
             'attendees_count' : event.attendees.count(),
@@ -134,7 +179,9 @@ class EventDetailView(SingleObjectMixin, View):
             'event_day' : event.event_date.day,
             'event_month' : event.event_date.month,
             'event_year' : event.event_date.year,
-            'form' : form
+            'form' : form,
+            'images' : images,
+            'image_form' : image_form
         }
 
         return render(request, 'events/event_detail.html', context)
@@ -197,6 +244,12 @@ class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return form
 
     def form_valid(self, form):
+        gmaps = googlemaps.Client(key=os.environ.get('GMAPS_GEO_API_KEY'))
+        geocode_result = gmaps.geocode(form.instance.location)
+        data = geocode_result[0]
+        form.instance.formatted_address = data['formatted_address']
+        form.instance.latitude = data['geometry']['location']['lat']
+        form.instance.longitude = data['geometry']['location']['lng']
         form.instance.author = self.request.user
         #we're overriding super.form_valid(), fixing the form, then calling it, passing in the form  
         return super().form_valid(form)
