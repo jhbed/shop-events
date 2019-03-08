@@ -7,5 +7,5 @@ class CommentForm(forms.Form):
     event = forms.DecimalField()
 
 class ImageForm(forms.Form):
-    image = forms.ImageField()
+    image = forms.ImageField(label='Add and image from the event')
     event = forms.DecimalField()
