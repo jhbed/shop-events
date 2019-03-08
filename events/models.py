@@ -20,6 +20,8 @@ from django.urls import reverse
     # def __str__(self):
     #     return self.formatted_address
 
+
+
 class Event(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()
@@ -58,6 +60,12 @@ class EventAnnouncement(models.Model):
 
     def __str__(self):
         return self.text
+
+class Comment(models.Model):
+    text = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
 
 
 

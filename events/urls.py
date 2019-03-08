@@ -19,5 +19,6 @@ urlpatterns = [
     path('event/<int:pk>/delete', view=EventDeleteView.as_view(), name='event-delete'),
     path('event/new/', view=EventCreateView.as_view(), name='event-create'),
     path('test/', views.test, name='test'),
-    path('compare_latlon/', views.CompareLatLon.as_view(), name='compare-latlon')
+    path('compare_latlon/', views.CompareLatLon.as_view(), name='compare-latlon'),
+    path('post_comment/', views.PostComment.as_view(), name='post-comment')
 ]

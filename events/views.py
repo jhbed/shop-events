@@ -1,4 +1,5 @@
 import os
+from .forms import CommentForm
 from django.utils import timezone
 from django.contrib import messages
 from django_proj.common.util.geo import get_distance
@@ -7,7 +8,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from .models import Event, Announcement, EventAnnouncement
+from .models import Event, Announcement, EventAnnouncement, Comment
 from django import forms
 from django.db.models import Count
 from django.contrib.auth.models import User
@@ -20,6 +21,26 @@ from django.views.generic import (ListView,
                                   DeleteView, 
                                   View)
 # Create your views here.
+
+
+class PostComment(View):
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('This page is not available.')
+
+    def post(self, request, *args, **kwargs):
+
+        form = CommentForm(request.POST)
+        if not form.is_valid():
+            return HttpResponse('invalid comment...')
+        else:
+            comment = form.cleaned_data['comment']
+            event_pk = form.cleaned_data['event']
+            event = Event.objects.get(pk=event_pk)
+            user = request.user 
+            comment_obj = Comment(text=comment, event=event, user=user)
+            comment_obj.save()
+            return redirect('event-detail', event_pk)
 
 class CompareLatLon(View):
 
@@ -49,11 +70,6 @@ class CompareLatLon(View):
             e = 'You must be logged in to check in to the event.'
             #messages.error(request, e)
             return HttpResponse(e)
-
-        
-
-        
-
 
         #return HttpResponse('hello')
         return HttpResponse('distance between you and event is: ' + str(dist))
@@ -104,7 +120,10 @@ class EventDetailView(SingleObjectMixin, View):
         #today = timezone.now().date()
         #event_is_today = today == event.event_date
         #event_is_passed = today > event.event_date
-
+        data = {
+            'event' : event.pk
+        }
+        form = CommentForm(initial=data)
         context = {
             'object' : event,
             'attendees_count' : event.attendees.count(),
@@ -114,7 +133,8 @@ class EventDetailView(SingleObjectMixin, View):
             'location' : location,
             'event_day' : event.event_date.day,
             'event_month' : event.event_date.month,
-            'event_year' : event.event_date.year
+            'event_year' : event.event_date.year,
+            'form' : form
         }
 
         return render(request, 'events/event_detail.html', context)

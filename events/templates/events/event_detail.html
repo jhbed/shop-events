@@ -1,6 +1,7 @@
 {% extends "events/base.html" %}
 {% load static %}
 {% block fullwidth_content %}
+{% load crispy_forms_tags %}
 <div class="container-fluid content-section">
     <div class="row">
       <div class="col-xl-9 mx-auto">
@@ -61,7 +62,7 @@
     </div>
 </div>
 <div class="container-fluid">
-    <div class="row mt-1">
+    <div class="row display-flex mt-1">
         <div class="col-md-4">
             <div class="content-section">
                 <h5 class="text-center">Details:</h5>
@@ -121,8 +122,55 @@
                             {{attendee.username}}
                         </li>
                     {% endfor %}
-                        
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-1">
+        <div class="col-md-8">
+            <div class="content-section">
+                <div class="comment-wrapper">
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            <form action="/events/post_comment/" method="post">
+                                {% csrf_token %}
+                                {{ form.comment|as_crispy_field }}
+                                {{ form.event.as_hidden }}
+                                <br>
+                                <button type="submit" class="btn btn-primary pull-right">Post</button>
+                            </form>
+                            <div class="clearfix"></div>
+                            <hr>
+                            <h5>Comments:</h5>
+                            <ul class="media-list">
 
+                                {% for comment in object.comments.all reversed %}
+                                <li class="media">
+                                    <img src="{{ comment.user.profile.image.url }}" 
+                                    class="rounded-circle article-img" 
+                                    alt="{{comment.user.username}}-img"
+                                    >
+                                    <div class="media-body">
+                                        <span class="text-muted pull-right">
+                                            <small class="text-muted">{{ comment.date_posted }}</small>
+                                        </span>
+                                        <strong class="text-primary">@{{ comment.user.username }}</strong>
+                                        <p>
+                                            {{ comment.text }}
+                                        </p>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="content-section">
+                <h5>Photo Gallery:</h5>
             </div>
         </div>
     </div>
