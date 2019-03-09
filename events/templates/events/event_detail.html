@@ -79,7 +79,7 @@
 <div class="container-fluid">
     <div class="row display-flex mt-1">
         <div class="col-md-4">
-            <div class="content-section">
+            <div class="content-section event-widget">
                 <h5 class="text-center">Details:</h5>
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-light">
@@ -112,7 +112,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="content-section">
+            <div class="content-section event-widget">
                 <h5 class="text-center">Location:</h5>
                 <h6 class="text-center">{{ object.location }}</h6>
                 <iframe
@@ -125,7 +125,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="content-section">
+            <div class="content-section event-widget">
                 <h5 class="text-center">People Going:</h5>
                 <ul class="list-group">
                     {%for attendee in object.attendees.all %}

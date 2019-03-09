@@ -144,3 +144,8 @@ body {
 .no-bold {
   font-weight: normal;
 }
+
+.event-widget {
+  max-height: 500px;
+  overflow: scroll;
+}
