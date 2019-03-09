@@ -140,3 +140,7 @@ body {
 .hov:hover {
   cursor: pointer;
 }
+
+.no-bold {
+  font-weight: normal;
+}

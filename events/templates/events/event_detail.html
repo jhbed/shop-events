@@ -6,6 +6,7 @@
     <div class="row">
       <div class="col-xl-9 mx-auto">
         <h1 class="display-3 text-center mt-5 mb-1">{{ object.title }}</h1>
+        <h2 class="text-center mb-2 no-bold">{{ object.event_date|date:"l, F d, Y" }}</h2>
         {% if object.author == user %}
         <div class="text-center">
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' object.pk %}">
