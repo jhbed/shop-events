@@ -5,7 +5,7 @@ $(document).ready(function(){
     function getLocation() {
         $('#waiting').text('Checking you in...')
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
+            navigator.geolocation.getCurrentPosition(showPosition, errorCallback, {timeout:10000});
             console.log('made it in getLocation')
         } else { 
             x.html("Geolocation is not supported by this browser.");
@@ -25,6 +25,11 @@ $(document).ready(function(){
 
         $(tag).html(data)
         $(tag).show()
+    }
+
+    function errorCallback(e) {
+        console.log('There was an error in navigator.geolocation.getCurrentPosition. Read the error below for more details')
+        console.log(e)
     }
 
     function showPosition(position) {
