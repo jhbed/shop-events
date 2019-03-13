@@ -121,6 +121,10 @@ body {
   display: none
 }
 
+/* #waiting {
+  display: none;
+} */
+
 .comment-wrapper .panel-body {
   max-height:650px;
   overflow:auto;

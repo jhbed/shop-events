@@ -3,6 +3,7 @@ $(document).ready(function(){
     var x = $('.demo');
 
     function getLocation() {
+        $('#waiting').text('Checking you in...')
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(showPosition);
             console.log('made it in getLocation')
@@ -13,6 +14,7 @@ $(document).ready(function(){
 
     function handleData(data) {
         console.log('response is ' + data)
+        $('#waiting').text('')
         if (data == 'Successfully checked you in') {
             var tag = '#ajax-success'
         } else {
