@@ -179,3 +179,5 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 if not local:
     django_heroku.settings(locals())
+    SECURE_SSL_REDIRECT=True
+
