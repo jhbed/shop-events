@@ -1,6 +1,7 @@
 
 
 import math
+#from .models import Tenant
 
 # Haversine formula example in Python
 # Author: Wayne Dyck

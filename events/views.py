@@ -3,6 +3,7 @@ from .forms import CommentForm, ImageForm
 from django.utils import timezone
 from django.contrib import messages
 from django_proj.common.util.geo import get_distance
+from django_proj.common.util.subdomain_utils import subdomain_from_request
 import googlemaps
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -21,7 +22,15 @@ from django.views.generic import (ListView,
                                   DeleteView, 
                                   View)
 # Create your views here.
-#adding git
+
+class GetSubDomain(View):
+    '''this view is just meant to test subdomain functionality'''
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponse(subdomain_from_request(request))
+        #return HttpResponse('hi')
+
+
 class PostImage(View):
 
     def post(self, request, *args, **kwargs):

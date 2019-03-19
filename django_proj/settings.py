@@ -27,9 +27,11 @@ SECRET_KEY = os.environ.get('EVENTS_APP_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG_VAL') == 'True'
 
-ALLOWED_HOSTS = ['events-app-djang.herokuapp.com']
+ALLOWED_HOSTS = ['events-app-djang.herokuapp.com', '.event-app-djang.herokuapp.com']
 if local:
     ALLOWED_HOSTS.append('localhost')
+    ALLOWED_HOSTS.append('.localhost')
+    #ALLOWED_HOSTS.append('goobly.localhost')
     #ALLOWED_HOSTS.append('cfeb9fba.ngrok.io')
 
 # Application definition
@@ -46,9 +48,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'storages', 
+    'django_hosts'
 ]
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_hosts.middleware.HostsResponseMiddleware'
 ]
 
 ROOT_URLCONF = 'django_proj.urls'
@@ -180,4 +185,10 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 if not local:
     django_heroku.settings(locals())
     SECURE_SSL_REDIRECT=True
+
+
+#used for django-hosts
+ROOT_HOSTCONF = 'django_proj.hosts'
+DEFAULT_HOST = 'www'
+    
 
