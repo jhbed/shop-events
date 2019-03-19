@@ -7,8 +7,10 @@ Django==2.1.7
 django-bootstrap-datepicker-plus==3.0.5
 django-crispy-forms==1.7.2
 django-heroku==0.3.1
+django-hosts==3.0
 django-storages==1.7.1
 docutils==0.14
+geographiclib==1.49
 googlemaps==3.0.2
 gunicorn==19.9.0
 idna==2.8
