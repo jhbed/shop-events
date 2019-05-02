@@ -239,6 +239,24 @@ class EventCreateView(LoginRequiredMixin, CreateView):
         #we're overriding super.form_valid(), fixing the form, then calling it, passing in the form  
         return super().form_valid(form)
 
+class EventDuplicateView(SingleObjectMixin, LoginRequiredMixin, UserPassesTestMixin, View):
+    model = Event
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs):
+        event = self.get_object()
+        event.pk = None
+        event.save()
+        messages.success(request, 'Event duplicated!')
+        return redirect('event-detail', event.pk)
+
+
+    def test_func(self):
+        '''This is the standard test func for making sure the user is the author of the post'''
+        post = self.get_object()
+        return self.request.user == post.author
+
+
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
     fields = ['title', 'location','rsvp_goal', 'content', 'image', 'event_date']

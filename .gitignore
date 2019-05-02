@@ -82,6 +82,8 @@ target/
 # IPython
 profile_default/
 ipython_config.py
+prototype.ipynb
+notebooks/
 
 # pyenv
 .python-version

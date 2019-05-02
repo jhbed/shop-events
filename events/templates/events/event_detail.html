@@ -12,6 +12,9 @@
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' object.pk %}">
                 Update Event
             </a>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-duplicate' object.pk %}">
+                Duplicate Event
+            </a>
             <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'event-delete' object.pk %}">
                     Delete Event
             </a>
