@@ -20,10 +20,16 @@
                             {{ form.location|as_crispy_field }}
                         </div>
                         <div class="form-group col-md-12 mb-0">
-                                {{ form.event_date|as_crispy_field }}
+                              {{ form.event_date|as_crispy_field }}
                         </div>
                         <div class="form-group col-md-12 mb-0">
                           {{ form.content|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-12 mb-0">
+                          {{ form.skill_level|as_crispy_field }}
+                        </div>
+                        <div class="form-group col-md-12 mb-0">
+                          {{ form.continuous_charge_miles_needed|as_crispy_field }}
                         </div>
                       </div>
                       <div class="form-row">

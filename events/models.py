@@ -37,6 +37,11 @@ class Event(models.Model):
     formatted_address = models.CharField(max_length=500, default="1600 Amphitheatre Parkway, Mountain View, CA 94043, USA")
     latitude = models.FloatField(default=47.6205)
     longitude = models.FloatField(default=122.3493)
+    #how much battery (in miles) a persons electric scateboard needs to be able to go
+    continuous_charge_miles_needed = models.FloatField(default=0.0)
+    #beginner, intermediate, advanced, etc
+    skill_level = models.CharField(max_length=200, default='Beginner')
+
 
     def __str__(self):
         return self.title

@@ -90,6 +90,12 @@
                         Event Date: {{ object.event_date|date:"F d, Y" }}
                     </li>
                     <li class="list-group-item list-group-item-light">
+                        Skill Level: {{ object.skill_level }}
+                    </li>
+                    <li class="list-group-item list-group-item-light">
+                        Continuous Charge Needed: {{ object.continuous_charge_miles_needed }} miles
+                    </li>
+                    <li class="list-group-item list-group-item-light">
                         <p>RSVP Goal Progress: </p>
                         <div class="progress">
                             <div class="progress-bar" role="progressbar" style="width: {{ width_ratio }}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="1">

@@ -139,6 +139,7 @@ class EventListView(ListView):
     ordering = ['-date_posted'] #a list of orderings (priority in front I assume). Minus sign is for descending!
     paginate_by = 8
     extra_context = {
+        #this causes errors on model change, leaving it commented out during development
         #'top_event' : Event.objects.all().annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first(),
         'most_active_shredder' : User.objects.all().annotate(event_count=Count('events')).order_by('-event_count').first(),
         'announcements' : Announcement.objects.all()
@@ -232,12 +233,21 @@ class EventDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 class EventCreateView(LoginRequiredMixin, CreateView):
     model = Event
-    fields = ['title', 'location','rsvp_goal', 'content', 'image', 'event_date']
+    fields = ['title', 'location','rsvp_goal', 'content', 'image', 'event_date', 'skill_level', 'continuous_charge_miles_needed']
+
+    skill_level_choices = ['Beginner', 'Intermediate','Advanced']
+    skill_level_choices = [(choice, choice) for choice in skill_level_choices]
 
     def get_form(self):
         form = super().get_form()
+        form.fields['rsvp_goal'] = forms.IntegerField(max_value=10000, min_value=0)
         form.fields['rsvp_goal'].widget = forms.NumberInput(attrs={'placeholder': 5})
         form.fields['event_date'].widget = forms.TextInput(attrs={'type':'date'})
+        #form.fields['skill_level'].widget = forms.ChoiceInput(choices=self.skill_level_choices, initial='Beginner', widget=forms.Select(), required=True)
+        form.fields['skill_level'] = forms.ChoiceField(choices=self.skill_level_choices)
+        form.fields['continuous_charge_miles_needed'] = forms.FloatField(max_value=1000,min_value=0)
+        form.fields['continuous_charge_miles_needed'].label = "Ride Distance (Miles)"
+        form.fields['continuous_charge_miles_needed'].widget = forms.TextInput(attrs={'placeholder': 0.0})
         return form
 
     def form_valid(self, form):
@@ -271,7 +281,12 @@ class EventDuplicateView(SingleObjectMixin, LoginRequiredMixin, UserPassesTestMi
 
 class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Event
-    fields = ['title', 'location','rsvp_goal', 'content', 'image', 'event_date']
+    fields = ['title', 'location','rsvp_goal', 'content', 'image', 'event_date', 'skill_level', 'continuous_charge_miles_needed']
+
+    skill_level_choices = ['Beginner', 'Intermediate','Advanced']
+    skill_level_choices = [(choice, choice) for choice in skill_level_choices]
+
+
     extra_context = {
         'update' : True
     }
@@ -280,6 +295,11 @@ class EventUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         form = super().get_form()
         form.fields['rsvp_goal'].widget = forms.NumberInput(attrs={'placeholder': 5})
         form.fields['event_date'].widget = forms.TextInput(attrs={'type':'date'})
+        #new fields
+        form.fields['skill_level'] = forms.ChoiceField(choices=self.skill_level_choices)
+        form.fields['continuous_charge_miles_needed'] = forms.FloatField(max_value=1000,min_value=0)
+        form.fields['continuous_charge_miles_needed'].label = "Ride Distance (Miles)"
+        form.fields['continuous_charge_miles_needed'].widget = forms.TextInput(attrs={'placeholder': 0.0})
         return form
 
     def form_valid(self, form):

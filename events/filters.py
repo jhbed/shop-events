@@ -56,19 +56,23 @@ class EventFilter(django_filters.FilterSet):
         'Wyoming': 'WY',
     }
     states = [(state, state) for state in STATE_DICT.keys()]
+    skill_levels = [(skill, skill) for skill in ['Beginner','Intermediate','Advanced']]
 
     event_state = django_filters.ChoiceFilter(label='Location', choices=states, method='filter_by_state')
+    skill_level = django_filters.ChoiceFilter(label='Skill Level', choices=skill_levels, method='filter_by_skill_level')
+    charge_length = django_filters.NumberFilter(label='Ride Distance (Miles)', lookup_expr='lte',field_name='continuous_charge_miles_needed')
 
-    class Meta:
-        model = Event
-        #for exact match
-        # fields = ['title] 
-        fields = {
-            #this is the syntax needed for not-exact match filtering
-            'title' : ['icontains']
-        }
+    # class Meta:
+    #     model = Event
+    #     #for exact match
+    #     # fields = ['title] 
+    #     fields = {
+    #         #this is the syntax needed for not-exact match filtering
+    #         'title' : ['icontains']
+    #     }
 
     def filter_by_state(self, queryset, name, value):
-
         return queryset.filter(formatted_address__contains=self.STATE_DICT[value])
+    def filter_by_skill_level(self, queryset, name, value):
+        return queryset.filter(skill_level=value)
 

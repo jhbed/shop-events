@@ -1,15 +1,8 @@
 {% extends "events/generic_content.html" %}
-
+{% load crispy_forms_tags %}
 {% block content %}
-      <div class="col-md-12">
-          <!-- <h2>Upcoming Events</h2> -->
-      </div>    
 
-    <form method="GET">
-      {{ filter.form }}
-      <button type="submit" class="btn btn-primary">Apply Filter</button>
-    </form>
-    
+
     {# {% for event in events %} #}
     {% for event in filter.qs %}
         <div class="col-md-12">
@@ -86,5 +79,18 @@
             <!-- <li class="list-group-item list-group-item-light">etc</li> -->
         </ul>
         </p>
+
+        <div class="col-md-12"> 
+    
+            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="collapse" data-target="#filters" aria-expanded="false" aria-controls="collapseExample">
+                Filter Results
+            </button>
+            <div class="collapse" id="filters">
+              <form method="GET">
+                {{ filter.form|crispy }}
+                <button type="submit" class="btn btn-secondary btn-sm">Apply Filter</button>
+              </form>
+            </div>
+          </div> 
     </div>
 {% endblock sidebar %}
