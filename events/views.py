@@ -16,6 +16,9 @@ from django.contrib.auth.models import User
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
+#crispy layout manipulation
+from crispy_forms.layout import Layout, Div, Field
+
 #filters
 from .filters import EventFilter
 
@@ -148,7 +151,11 @@ class EventListView(ListView):
     #overriding method that sends context to
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['filter'] = EventFilter(self.request.GET, queryset=self.get_queryset())
+        filt = EventFilter(self.request.GET, queryset=self.get_queryset())
+        # filt.form.form.helper.layout = Layout(
+        #     Field('event_state', css_class='form_control_sm')
+        # )
+        context['filter'] = filt
         return context
 
 
