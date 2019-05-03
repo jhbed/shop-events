@@ -15,6 +15,11 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+#filters
+from .filters import EventFilter
+
+#generic views
 from django.views.generic import (ListView, 
                                   DetailView, 
                                   CreateView,
@@ -138,6 +143,13 @@ class EventListView(ListView):
         'most_active_shredder' : User.objects.all().annotate(event_count=Count('events')).order_by('-event_count').first(),
         'announcements' : Announcement.objects.all()
     }
+
+    #overriding method that sends context to
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter'] = EventFilter(self.request.GET, queryset=self.get_queryset())
+        return context
+
 
 class UserEventListView(ListView):
     model = Event
