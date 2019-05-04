@@ -21,9 +21,11 @@ from shopify_con import views as shopfiy_con_views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('privacy-policy', TemplateView.as_view(template_name='events/privacy_policy.html')),
     path('shopify/', include('shopify_con.urls')),
 
     #remove the below once subdomains are working fine
