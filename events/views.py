@@ -16,6 +16,9 @@ from django.contrib.auth.models import User
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
+#pagination - maybe unused?
+from django.core.paginator import Paginator
+
 #crispy layout manipulation
 from crispy_forms.layout import Layout, Div, Field
 
@@ -140,7 +143,7 @@ class EventListView(ListView):
     template_name = 'events/home.html'
     context_object_name = 'events'
     ordering = ['-date_posted'] #a list of orderings (priority in front I assume). Minus sign is for descending!
-    paginate_by = 8
+    #paginate_by = 8
     extra_context = {
         #this causes errors on model change, leaving it commented out during development
         #'top_event' : Event.objects.all().annotate(attendee_count=Count('attendees')).order_by('-attendee_count').first(),
@@ -148,15 +151,29 @@ class EventListView(ListView):
         'announcements' : Announcement.objects.all()
     }
 
-    #overriding method that sends context to
+    #overriding method that sends context to template
     def get_context_data(self, **kwargs):
+        '''
+        Key overrides:
+         - adding in the filter object so we can filter the queryset
+         - instead of using the listviews builtin paginator, we have to use
+           our own (which paginates the filtered set), hence making it here in this method. 
+        '''
         context = super().get_context_data(**kwargs)
         filt = EventFilter(self.request.GET, queryset=self.get_queryset())
-        # filt.form.form.helper.layout = Layout(
-        #     Field('event_state', css_class='form_control_sm')
-        # )
+        #we need the filter in context for it's form object
         context['filter'] = filt
+
+        #we then paginate our filt.qs results and add those to template context
+        paginator = Paginator(filt.qs, 8)
+        page = self.request.GET.get('page')
+        paginated_qs = paginator.get_page(page)
+        context['qs'] = paginated_qs
+        context['is_paginated'] = True
+        #context['filter'] = paginated_qs
+        #context['is_paginated'] = False
         return context
+
 
 
 class UserEventListView(ListView):
