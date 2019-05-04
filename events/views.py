@@ -277,7 +277,7 @@ class EventDuplicateView(SingleObjectMixin, LoginRequiredMixin, UserPassesTestMi
         event.pk = None
         event.save()
         messages.success(request, 'Event duplicated!')
-        return redirect('event-detail', event.pk)
+        return redirect('event-update', event.pk)
 
 
     def test_func(self):
