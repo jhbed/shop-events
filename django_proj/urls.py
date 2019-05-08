@@ -25,7 +25,7 @@ from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('privacy-policy', TemplateView.as_view(template_name='events/privacy_policy.html')),
+    #path('privacy-policy', TemplateView.as_view(template_name='events/privacy_policy.html')),
     path('shopify/', include('shopify_con.urls')),
 
     #remove the below once subdomains are working fine
