@@ -3,12 +3,12 @@
 {% load thumbnail %}
 {% block fullwidth_content %}
 {% load crispy_forms_tags %}
-
 <div class="container-fluid content-section">
     <div class="row">
       <div class="col-xl-9 mx-auto">
         <h1 class="display-3 text-center mt-5 mb-1">{{ object.title }}</h1>
         <h2 class="text-center mb-2 no-bold">{{ object.event_date|date:"l, F d, Y" }}</h2>
+        
         {% if object.author == user %}
         <div class="text-center">
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'event-update' object.pk %}">
@@ -23,6 +23,7 @@
 
         </div>
         {% endif %}
+        
         <hr/>
       </div>
     </div>
@@ -49,8 +50,7 @@
                     <button type="button" class="mb-2 btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                         RSVP to Event!
                     </button>
-                </div>
-                    
+                </div> 
                 <div id="today-button">
                     <div>
                         <p>
@@ -72,6 +72,7 @@
                         </p>
                     </div>
                 </div>
+                
                 <div class="row">
                     <div class="col-md-4" ></div>
                     <div class="col-md-4">
@@ -123,7 +124,10 @@
                             Description: {{ object.content }}
                     </li>
                 </ul>
-        
+                <div class="mt-2">
+                    <div class="sharethis-inline-share-buttons"></div>
+                </div>
+                
             </div>
         </div>
         <div class="col-md-4">

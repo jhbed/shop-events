@@ -217,6 +217,7 @@ class EventDetailView(SingleObjectMixin, View):
             images = [img.image for img in event.event_images.all()]
         context = {
             'object' : event,
+            'object_fb_url' : event.get_absolute_url().replace('/', '%2F'),
             'attendees_count' : event.attendees.count(),
             'check_in_count' : event.checked_in.count(),
             'width_ratio' : width_ratio,

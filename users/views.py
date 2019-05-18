@@ -12,6 +12,7 @@ from django.conf import settings
 def register(request):
 
     if request.method == 'POST':
+        #fill a form with the data in the POST payload
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save() #a user creation form, it knows our intent is to create a user, hence simplicity
@@ -19,8 +20,10 @@ def register(request):
             messages.success(request, f"Your account has been created! You're now able to login.")
             return redirect('login')
     else:
+        #we have a GET request, display the UserRegisterForm
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form' : form})
+
 
 @login_required
 def profile(request):

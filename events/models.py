@@ -52,6 +52,11 @@ class Event(models.Model):
     def get_absolute_url(self):
         return reverse('event-detail', kwargs={'pk' : self.pk})
 
+    def get_fb_url(self):
+        string = reverse('event-detail', kwargs={'pk' : self.pk})
+        string.replace('/', '%2F')
+
+
 
 class Announcement(models.Model):
     text = models.TextField()
